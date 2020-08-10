@@ -29,8 +29,12 @@ spec:
       volumes:
         - name: home
           emptyDir: {}
+      securityContext:
+        {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
           image: {{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default (print "v" .Chart.AppVersion) }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           env:
