@@ -21,6 +21,7 @@ spec:
         {{- include "dctna.selectorLabels" . | nindent 8 }}
         component: server
     spec:
+      terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}

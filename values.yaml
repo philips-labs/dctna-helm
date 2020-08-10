@@ -93,3 +93,4 @@ server:
     size: 1Gi
     accessMode: ReadWriteOnce
     storageClass: null
+  terminationGracePeriodSeconds: 10
