@@ -79,6 +79,9 @@ server:
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
   podSecurityContext: {}
     # fsGroup: 2000
   vault:
