@@ -76,4 +76,8 @@ server:
     address: https://vault.hashicorp-vault:8200
   notary:
     address: https://notary.docker.io
-
+  dataStorage:
+    enabled: true
+    size: 1Gi
+    accessMode: ReadWriteOnce
+    storageClass: null

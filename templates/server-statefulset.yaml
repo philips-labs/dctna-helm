@@ -38,6 +38,11 @@ spec:
               value: {{ .Values.server.vault.address }}
             - name: REMOTE_SERVER_URL
               value: {{ .Values.server.notary.address }}
+          volumeMounts:
+            {{- if eq (.Values.server.dataStorage.enabled | toString) "true" }}
+            - name: notary-data
+              mountPath: /root/.notary
+            {{ end }}
           ports:
             - name: https
               containerPort: 443
@@ -55,3 +60,17 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.server.resources | nindent 12 }}
+  volumeClaimTemplates:
+    {{- if eq (.Values.server.dataStorage.enabled | toString) "true" }}
+    - metadata:
+        name: notary-data
+      spec:
+        accessModes:
+          - {{ .Values.server.dataStorage.accessMode | default "ReadWriteOnce" }}
+        resources:
+          requests:
+            storage: {{ .Values.server.dataStorage.size }}
+        {{- if .Values.server.dataStorage.storageClass }}
+        storageClassName: {{ .Values.server.dataStorage.storageClass }}
+        {{- end }}
+    {{ end }}
