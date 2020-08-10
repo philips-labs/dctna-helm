@@ -34,6 +34,9 @@ spec:
             {{- toYaml .Values.web.securityContext | nindent 12 }}
           image: {{ .Values.web.image.repository }}:{{ .Values.web.image.tag | default (print "v" .Chart.AppVersion) }}
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          env:
+            - name: DCTNA_API
+              value: {{ print "https://" (include "dctna.fullname" .) "-server:" .Values.server.service.port }}
           ports:
             - name: http
               containerPort: 80

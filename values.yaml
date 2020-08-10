@@ -49,3 +49,9 @@ web:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+server:
+  service:
+    type: ClusterIP
+    port: 443
+    name: https
