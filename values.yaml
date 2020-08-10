@@ -46,3 +46,6 @@ web:
     #   memory: 128Mi
   podSecurityContext: {}
     # fsGroup: 2000
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
