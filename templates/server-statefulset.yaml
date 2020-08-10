@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "dctna.fullname" . }}-server
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "dctna.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "dctna.fullname" . }}-server
+  selector:
+    matchLabels:
+      {{- include "dctna.selectorLabels" . | nindent 6 }}
+      component: server
+  template:
+    metadata:
+    {{- with .Values.server.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "dctna.selectorLabels" . | nindent 8 }}
+        component: server
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dctna.serviceAccountName" . }}
+      volumes:
+        - name: home
+          emptyDir: {}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default (print "v" .Chart.AppVersion) }}
+          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          env:
+            - name: VAULT_ADDR
+              value: {{ .Values.server.vault.address }}
+            - name: REMOTE_SERVER_URL
+              value: {{ .Values.server.notary.address }}
+          ports:
+            - name: https
+              containerPort: 443
+              protocol: TCP
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          resources:
+            {{- toYaml .Values.server.resources | nindent 12 }}
