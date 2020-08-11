@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   lint-chart:
     runs-on: ubuntu-20.04
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -22,6 +23,7 @@ jobs:
 
   kubeval-chart:
     runs-on: ubuntu-20.04
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     needs:
       - lint-chart
     strategy:
@@ -43,6 +45,7 @@ jobs:
   install-chart:
     name: install-chart
     runs-on: ubuntu-20.04
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     needs:
       - lint-chart
       - kubeval-chart
