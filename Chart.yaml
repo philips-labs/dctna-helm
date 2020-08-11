@@ -9,3 +9,7 @@ type: application
 sources:
     - https://github.com/philips-labs/dct-notary-admin
     - https://github.com/philips-labs/dctna-helm
+maintainers:
+  - name: Marco Franssen
+    email: marco.franssen@philips.com
+kubeVersion: ">=1.15"

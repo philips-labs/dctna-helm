@@ -17,6 +17,9 @@ jobs:
         with:
           command: lint
 
+      - name: Run helm-docs
+        run: .github/helm-docs.sh
+
   install-chart:
     name: install-chart
     runs-on: ubuntu-latest
