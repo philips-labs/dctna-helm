@@ -2,9 +2,9 @@
 
 <!-- This README.md is generated. -->
 
-This repository contains the Helm Chart for installing and configuring [DCTNA](https://github.com/philips-labs/dct-notary-admin).
+This repository contains the Helm Chart for installing and configuring [DCTNA](https://github.com/philips-labs/dct-notary-admin) (Docker Content Trust Notary Admin).
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 A Helm chart for DCTNA.
 
@@ -23,7 +23,7 @@ A Helm chart for DCTNA.
 
 ## Requirements
 
-Kubernetes: `>=1.15`
+Kubernetes: `>=1.15.0-0`
 
 ## Values
 
@@ -32,9 +32,32 @@ Kubernetes: `>=1.15`
 | fullnameOverride | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | nameOverride | string | `""` |  |
+| server.affinity | object | `{}` |  |
+| server.dataStorage.accessMode | string | `"ReadWriteOnce"` |  |
+| server.dataStorage.enabled | bool | `true` |  |
+| server.dataStorage.size | string | `"1Gi"` |  |
+| server.dataStorage.storageClass | string | `nil` |  |
+| server.image.pullPolicy | string | `"IfNotPresent"` |  |
+| server.image.repository | string | `"philipssoftware/dctna-server"` |  |
+| server.image.tag | string | `""` |  |
+| server.nodeSelector | object | `{}` |  |
+| server.notary.auth.enabled | bool | `true` |  |
+| server.notary.auth.password | string | `""` |  |
+| server.notary.auth.username | string | `""` |  |
+| server.notary.config.remote_server.skipTLSVerify | bool | `false` |  |
+| server.notary.config.remote_server.url | string | `"https://notary.docker.io"` |  |
+| server.notary.config.trust_dir | string | `"./data"` |  |
+| server.podAnnotations | object | `{}` |  |
+| server.podSecurityContext | object | `{}` |  |
+| server.resources | object | `{}` |  |
+| server.securityContext | object | `{}` |  |
+| server.service.httpPort | int | `80` |  |
+| server.service.httpsPort | int | `443` |  |
 | server.service.name | string | `"https"` |  |
-| server.service.port | int | `443` |  |
 | server.service.type | string | `"ClusterIP"` |  |
+| server.terminationGracePeriodSeconds | int | `10` |  |
+| server.tolerations | list | `[]` |  |
+| server.vault.address | string | `"https://vault.hashicorp-vault:8200"` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |

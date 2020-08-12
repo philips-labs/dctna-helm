@@ -25,7 +25,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "dctna.serviceAccountName" . }}
+      serviceAccountName: {{ include "dctna.serviceAccountName" . }}-web
       securityContext:
         {{- toYaml .Values.web.podSecurityContext | nindent 8 }}
       containers:
@@ -36,7 +36,7 @@ spec:
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           env:
             - name: DCTNA_API
-              value: {{ print "https://" (include "dctna.fullname" .) "-server:" .Values.server.service.port }}
+              value: {{ print "https://" (include "dctna.fullname" .) "-server:" .Values.server.service.httpsPort }}
           ports:
             - name: http
               containerPort: 80

@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "dctna.fullname" . }}-server
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "dctna.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "dctna.fullname" . }}-server
+  selector:
+    matchLabels:
+      {{- include "dctna.selectorLabels" . | nindent 6 }}
+      component: server
+  template:
+    metadata:
+    {{- with .Values.server.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "dctna.selectorLabels" . | nindent 8 }}
+        component: server
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dctna.serviceAccountName" . }}-server
+      volumes:
+        - name: home
+          emptyDir: {}
+        - name: notary-config
+          configMap:
+            name: {{ include "dctna.fullname" . }}-notary-config
+      securityContext:
+        {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
+          image: {{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default (print "v" .Chart.AppVersion) }}
+          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          env:
+            - name: VAULT_ADDR
+              value: {{ .Values.server.vault.address }}
+            - name: REMOTE_SERVER_URL
+              value: {{ .Values.server.notary.config.remote_server.url }}
+            - name: NOTARY_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dctna.fullname" . }}-notary-auth
+                  key: basic
+          volumeMounts:
+            {{- if eq (.Values.server.dataStorage.enabled | toString) "true" }}
+            - name: notary-data
+              mountPath: /root/.notary/data
+            {{ end }}
+            - name: notary-config
+              mountPath: /root/.notary
+          ports:
+            - name: https
+              containerPort: 8443
+              protocol: TCP
+            - name: http
+              containerPort: 8086
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          resources:
+            {{- toYaml .Values.server.resources | nindent 12 }}
+      {{- with .Values.server.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.server.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.server.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+    {{- if eq (.Values.server.dataStorage.enabled | toString) "true" }}
+    - metadata:
+        name: notary-data
+      spec:
+        accessModes:
+          - {{ .Values.server.dataStorage.accessMode | default "ReadWriteOnce" }}
+        resources:
+          requests:
+            storage: {{ .Values.server.dataStorage.size }}
+        {{- if .Values.server.dataStorage.storageClass }}
+        storageClassName: {{ .Values.server.dataStorage.storageClass }}
+        {{- end }}
+    {{ end }}
