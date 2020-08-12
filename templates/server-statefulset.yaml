@@ -30,6 +30,9 @@ spec:
       volumes:
         - name: home
           emptyDir: {}
+        - name: notary-config
+          configMap:
+            name: {{ include "dctna.fullname" . }}-notary-config
       securityContext:
         {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
       containers:
@@ -42,7 +45,7 @@ spec:
             - name: VAULT_ADDR
               value: {{ .Values.server.vault.address }}
             - name: REMOTE_SERVER_URL
-              value: {{ .Values.server.notary.address }}
+              value: {{ .Values.server.notary.config.remote_server.url }}
             - name: NOTARY_AUTH
               valueFrom:
                 secretKeyRef:
@@ -51,8 +54,10 @@ spec:
           volumeMounts:
             {{- if eq (.Values.server.dataStorage.enabled | toString) "true" }}
             - name: notary-data
-              mountPath: /root/.notary
+              mountPath: /root/.notary/data
             {{ end }}
+            - name: notary-config
+              mountPath: /root/.notary
           ports:
             - name: https
               containerPort: 8443

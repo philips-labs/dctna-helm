@@ -66,11 +66,19 @@ server:
   vault:
     address: https://vault.hashicorp-vault:8200
   notary:
-    address: https://notary.docker.io
     auth:
       enabled: true
       username: ''
       password: ''
+    config:
+      {
+        "trust_dir": "./data",
+        "remote_server": {
+          "url": "https://notary.docker.io",
+          "skipTLSVerify": false
+        }
+      }
+
     # capabilities:
     #   drop:
     #   - ALL
