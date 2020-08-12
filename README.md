@@ -2,7 +2,7 @@
 
 <!-- This README.md is generated. -->
 
-This repository contains the Helm Chart for installing and configuring [DCTNA](https://github.com/philips-labs/dct-notary-admin).
+This repository contains the Helm Chart for installing and configuring [DCTNA](https://github.com/philips-labs/dct-notary-admin) (Docker Content Trust Notary Admin).
 
 ![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
