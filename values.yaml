@@ -58,7 +58,8 @@ server:
     tag: ""
   service:
     type: ClusterIP
-    port: 443
+    httpPort: 80
+    httpsPort: 443
     name: https
   podAnnotations: {}
   securityContext: {}

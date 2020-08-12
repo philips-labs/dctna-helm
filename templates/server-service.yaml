@@ -8,9 +8,12 @@ metadata:
 spec:
   type: {{ .Values.server.service.type }}
   ports:
-    - port: {{ .Values.server.service.port }}
-      targetPort: https
+    - port: {{ .Values.server.service.httpPort }}
+      targetPort: http
       protocol: TCP
+      name: http
+    - port: {{ .Values.server.service.httpsPort }}
+      targetPort: https
       name: https
   selector:
     {{- include "dctna.selectorLabels" . | nindent 4 }}
