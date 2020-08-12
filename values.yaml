@@ -62,6 +62,14 @@ server:
     name: https
   podAnnotations: {}
   securityContext: {}
+  vault:
+    address: https://vault.hashicorp-vault:8200
+  notary:
+    address: https://notary.docker.io
+    auth:
+      enabled: true
+      username: ''
+      password: ''
     # capabilities:
     #   drop:
     #   - ALL
@@ -84,10 +92,6 @@ server:
   affinity: {}
   podSecurityContext: {}
     # fsGroup: 2000
-  vault:
-    address: https://vault.hashicorp-vault:8200
-  notary:
-    address: https://notary.docker.io
   dataStorage:
     enabled: true
     size: 1Gi

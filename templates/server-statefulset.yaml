@@ -43,6 +43,11 @@ spec:
               value: {{ .Values.server.vault.address }}
             - name: REMOTE_SERVER_URL
               value: {{ .Values.server.notary.address }}
+            - name: NOTARY_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dctna.fullname" . }}-notary-auth
+                  key: basic
           volumeMounts:
             {{- if eq (.Values.server.dataStorage.enabled | toString) "true" }}
             - name: notary-data
