@@ -12,4 +12,4 @@ sources:
 maintainers:
   - name: Marco Franssen
     email: marco.franssen@philips.com
-kubeVersion: ">=1.15"
+kubeVersion: ">=1.15.0-0"
