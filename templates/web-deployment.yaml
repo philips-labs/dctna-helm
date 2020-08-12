@@ -25,7 +25,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "dctna.serviceAccountName" . }}
+      serviceAccountName: {{ include "dctna.serviceAccountName" . }}-web
       securityContext:
         {{- toYaml .Values.web.podSecurityContext | nindent 8 }}
       containers:

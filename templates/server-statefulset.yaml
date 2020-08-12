@@ -26,7 +26,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "dctna.serviceAccountName" . }}
+      serviceAccountName: {{ include "dctna.serviceAccountName" . }}-server
       volumes:
         - name: home
           emptyDir: {}
