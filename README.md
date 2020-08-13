@@ -65,6 +65,7 @@ Kubernetes: `>=1.15.0-0`
 | web.image.pullPolicy | string | `"IfNotPresent"` |  |
 | web.image.repository | string | `"philipssoftware/dctna-web"` |  |
 | web.image.tag | string | `""` |  |
+| web.ingress.enabled | bool | `false` |  |
 | web.nodeSelector | object | `{}` |  |
 | web.podAnnotations | object | `{}` |  |
 | web.podSecurityContext | object | `{}` |  |
