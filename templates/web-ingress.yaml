@@ -32,10 +32,10 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          - path: {{ . }}
+          - path: {{ .path }}
             backend:
-              serviceName: {{ $fullName }}-web
-              servicePort: {{ $svcPort }}
+              serviceName: {{- if .backend }} {{ .backend.serviceName | default $fullName }} {{- else }} {{ $fullName }} {{ end }}
+              servicePort: {{- if .backend }} {{ .backend.servicePort | default $svcPort }} {{- else }} {{ $svcPort }} {{ end }}
           {{- end }}
     {{- end }}
   {{- end }}
