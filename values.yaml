@@ -51,6 +51,8 @@ web:
   affinity: {}
   ingress:
     enabled: false
+    annotations: {}
+    hosts: {}
 
 server:
   image:
