@@ -3,7 +3,7 @@ name: dctna
 description: A Helm chart for DCTNA.
 home: https://github.com/philips-labs/dct-notary-admin
 version: 0.2.0
-appVersion: 0.1.0
+appVersion: 0.1.1
 keywords: ["notary", "docker", "tuf", "dctna", "code-signing", "image-signing"]
 type: application
 sources:
