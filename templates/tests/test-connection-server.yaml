@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "dctna.fullname" . }}-test-connection-server"
+  labels:
+    {{- include "dctna.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "dctna.fullname" . }}-server:{{ .Values.server.service.port }}']
+  restartPolicy: Never
