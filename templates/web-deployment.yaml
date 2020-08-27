@@ -6,7 +6,9 @@ metadata:
   labels:
     {{- include "dctna.labels" . | nindent 4 }}
 spec:
+{{- if not .Values.web.autoscaling.enabled }}
   replicas: {{ .Values.web.replicaCount }}
+{{- end }}
   selector:
     matchLabels:
       {{- include "dctna.selectorLabels" . | nindent 6 }}
@@ -41,14 +43,24 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+          {{- if .Values.web.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /
-              port: http
+              path: {{ .Values.web.livenessProbe.path | default "/" }}
+              port: {{ .Values.web.service.port | default "http" }}
+            initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds | default 5 }}
+            timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds | default 20 }}
+          {{- end }}
+          {{- if .Values.web.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /
-              port: http
+              path: {{ .Values.web.readinessProbe.path | default "/" }}
+              port: {{ .Values.web.service.port | default "http" }}
+            initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds | default 5 }}
+            timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds | default 5 }}
+            successThreshold: {{ .Values.web.readinessProbe.successThreshold | default 5 }}
+            periodSeconds: {{ .Values.web.readinessProbe.periodSeconds | default 10 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
       {{- with .Values.web.nodeSelector }}
